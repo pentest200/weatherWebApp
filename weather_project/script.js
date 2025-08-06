@@ -14,11 +14,15 @@ const getData = async (city)=>{
     document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h"
     document.querySelector(".city").innerHTML = data.name;
     
-    if(response.status === 404 || data.cod === "404"){
+    if(response.status === "404" || data.cod === "404"){
         document.querySelector(".weather").style.display = "none";
         document.querySelector(".error").style.display = "block";
     }
     else{
+        document.querySelector(".temp").innerHTML = Math.round(data.main.temp - 273.15)+"°C";
+        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
+        document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h"
+        document.querySelector(".city").innerHTML = data.name;
         if(data.weather[0].main == "Clouds"){
             weatherIcon.src = "weather-app-img/images/clouds.png";
         }else if(data.weather[0].main == "Rain"){
@@ -43,4 +47,5 @@ const getData = async (city)=>{
 searchButton.addEventListener("click", ()=>{
     getData(searchBox.value);
 });
+
 // Invalid City Name isn't working yet
