@@ -4,21 +4,24 @@ const searchBox = document.querySelector(".search input");
 const searchButton = document.querySelector(".search button");
 const weatherIcon = document.querySelector(".weather-icon");
 const getData = async (city)=>{
+    if(!city || city.trim() === ""){
+        document.querySelector(".error").style.display = "block";
+        document.querySelector(".weather").style.display = "none";
+        return;
+    }
+    
     console.log("Getting data");
     let response = await fetch(apiUrl + city + "&appid=" + apiKey);
     let data = await response.json();
-    console.log(data);
+    
 
-    document.querySelector(".temp").innerHTML = Math.round(data.main.temp - 273.15)+"°C";
-    document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-    document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h"
-    document.querySelector(".city").innerHTML = data.name;
     
     if(response.status === "404" || data.cod === "404"){
         document.querySelector(".weather").style.display = "none";
         document.querySelector(".error").style.display = "block";
     }
     else{
+        
         document.querySelector(".temp").innerHTML = Math.round(data.main.temp - 273.15)+"°C";
         document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
         document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h"
@@ -48,4 +51,8 @@ searchButton.addEventListener("click", ()=>{
     getData(searchBox.value);
 });
 
-// Invalid City Name isn't working yet
+searchBox.addEventListener("keypress", (event)=>{
+    if(event.key === "Enter"){
+        getData(searchBox.value);
+    }
+});
